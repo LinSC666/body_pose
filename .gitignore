@@ -4,3 +4,4 @@ _pycache__/
 models/
 build/
 lib/
+.vscode/
