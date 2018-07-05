@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sensor_msgs
   cv_bridge
+  message_generation
 )
 
 
@@ -22,6 +23,11 @@ include_directories(
 add_service_files(
   FILES
   BodyPose.srv
+)
+
+add_message_files(
+  FILES
+  BodyInfo.msg
 )
 
 generate_messages(
