@@ -40,65 +40,86 @@ def update_image(image):
     global current_image
     current_image = image
 
+
 def draw_point(cv_image, location):
-    cv2.circle(cv_image, location, 10, (255,0,0))
+    cv2.circle(cv_image, (int(location[0]), int(
+        location[1])), 4, (255, 0, 0), thickness=4)
+
 
 if __name__ == "__main__":
     rospy.init_node("body_pose_test", anonymous=True)
     rospy.Subscriber("~image", Image, update_image)
+    rospy.loginfo("Waitting for get_body_pose service")
     rospy.wait_for_service("~get_body_pose")
+    rospy.loginfo("Waitting for get_body_pose service succeed")
     get_body_pose = rospy.ServiceProxy('~get_body_pose', BodyPose)
-    while current_image is None:
+    while current_image is None and not rospy.is_shutdown():
         time.sleep(1)
-        topic_name = topics.get_name("~image")
         rospy.logwarn("Cannot get image from {topic}".format(
-            topic=topic_name))
-    req = BodyPoseRequest()
-    req.image = current_image
-    res = get_body_pose(current_image)
-    # draw res in message
-    bridge = CvBridge()
-    try:
-        cv_image = bridge.imgmsg_to_cv2(req.image, "bgr8")
-    except CvBridgeError as e:
-        rospy.logerr(e)
-    for body in res.body_poses:
-        if body.nose[0] > 0:
-            draw_point(cv_image, (body.nose[0], body.nose[1]))
-        if body.right_eye[0] > 0:
-            draw_point(cv_image, (body.right_eye[0], body.right_eye[1]))
-        if body.left_eye[0] > 0:
-            draw_point(cv_image, (body.left_eye[0], body.left_eye[1]))
-        if body.right_ear[0] > 0:
-            draw_point(cv_image, (body.right_ear[0], body.right_ear[1]))
-        if body.left_ear[0] > 0:
-            draw_point(cv_image, (body.left_ear[0], body.left_ear[1]))
-        if body.right_arm_top[0] > 0:
-            draw_point(cv_image, (body.right_arm_top[0], body.right_arm_top[1]))
-        if body.left_arm_top[0] > 0:
-            draw_point(cv_image, (body.left_arm_top[0], body.left_arm_top[1]))
-        if body.right_arm_middle[0] > 0:
-            draw_point(cv_image, (body.right_arm_middle[0], body.right_arm_middle[1]))
-        if body.left_arm_middle[0] > 0:
-            draw_point(cv_image, (body.left_arm_middle[0], body.left_arm_middle[1]))
-        if body.right_arm_bottom[0] > 0:
-            draw_point(cv_image, (body.right_arm_bottom[0], body.right_arm_bottom[1]))
-        if body.left_arm_bottom[0] > 0:
-            draw_point(cv_image, (body.left_arm_bottom[0], body.left_arm_bottom[1]))
-        if body.right_leg_top[0] > 0:
-            draw_point(cv_image, (body.right_leg_top[0], body.right_leg_top[1]))
-        if body.left_leg_top[0] > 0:
-            draw_point(cv_image, (body.left_leg_top[0], body.left_leg_top[1]))
-        if body.right_leg_middle[0] > 0:
-            draw_point(cv_image, (body.right_leg_middle[0], body.right_leg_middle[1]))
-        if body.left_leg_middle[0] > 0:
-            draw_point(cv_image, (body.left_leg_middle[0], body.left_leg_middle[1]))
-        if body.right_leg_bottom[0] > 0:
-            draw_point(cv_image, (body.right_leg_bottom[0], body.right_leg_bottom[1]))
-        if body.left_leg_bottom[0] > 0:
-            draw_point(cv_image, (body.left_leg_bottom[0], body.left_leg_bottom[1]))
-    
+            topic="~image"))
+
     # publish processed image
     image_pub = rospy.Publisher("~processed_image", Image, queue_size=10)
-    image_msg = bridge.imgmsg_to_cv2(cv_image, "bgr8")
-    image_pub.publish(image_msg)
+
+    while not rospy.is_shutdown():
+        req = BodyPoseRequest()
+        req.image = current_image
+        res = get_body_pose(current_image)
+        # draw res in message
+        bridge = CvBridge()
+        try:
+            cv_image = bridge.imgmsg_to_cv2(req.image, "bgr8")
+        except CvBridgeError as e:
+            rospy.logerr(e)
+        for body in res.body_poses:
+            if body.nose[0] > 0:
+                draw_point(cv_image, (body.nose[0], body.nose[1]))
+            if body.right_eye[0] > 0:
+                draw_point(cv_image, (body.right_eye[0], body.right_eye[1]))
+            if body.left_eye[0] > 0:
+                draw_point(cv_image, (body.left_eye[0], body.left_eye[1]))
+            if body.right_ear[0] > 0:
+                draw_point(cv_image, (body.right_ear[0], body.right_ear[1]))
+            if body.left_ear[0] > 0:
+                draw_point(cv_image, (body.left_ear[0], body.left_ear[1]))
+            if body.right_arm_top[0] > 0:
+                draw_point(
+                    cv_image, (body.right_arm_top[0], body.right_arm_top[1]))
+            if body.left_arm_top[0] > 0:
+                draw_point(
+                    cv_image, (body.left_arm_top[0], body.left_arm_top[1]))
+            if body.right_arm_middle[0] > 0:
+                draw_point(
+                    cv_image, (body.right_arm_middle[0], body.right_arm_middle[1]))
+            if body.left_arm_middle[0] > 0:
+                draw_point(
+                    cv_image, (body.left_arm_middle[0], body.left_arm_middle[1]))
+            if body.right_arm_bottom[0] > 0:
+                draw_point(
+                    cv_image, (body.right_arm_bottom[0], body.right_arm_bottom[1]))
+            if body.left_arm_bottom[0] > 0:
+                draw_point(
+                    cv_image, (body.left_arm_bottom[0], body.left_arm_bottom[1]))
+            if body.right_leg_top[0] > 0:
+                draw_point(
+                    cv_image, (body.right_leg_top[0], body.right_leg_top[1]))
+            if body.left_leg_top[0] > 0:
+                draw_point(
+                    cv_image, (body.left_leg_top[0], body.left_leg_top[1]))
+            if body.right_leg_middle[0] > 0:
+                draw_point(
+                    cv_image, (body.right_leg_middle[0], body.right_leg_middle[1]))
+            if body.left_leg_middle[0] > 0:
+                draw_point(
+                    cv_image, (body.left_leg_middle[0], body.left_leg_middle[1]))
+            if body.right_leg_bottom[0] > 0:
+                draw_point(
+                    cv_image, (body.right_leg_bottom[0], body.right_leg_bottom[1]))
+            if body.left_leg_bottom[0] > 0:
+                draw_point(
+                    cv_image, (body.left_leg_bottom[0], body.left_leg_bottom[1]))
+        try:
+            image_msg = bridge.cv2_to_imgmsg(cv_image, "bgr8")
+        except CvBridgeError as e:
+            rospy.logerr(e)
+        image_pub.publish(image_msg)

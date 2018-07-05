@@ -48,6 +48,7 @@ from util import visualize
 
 # setup tensorflow date
 current_path = os.path.dirname(__file__)
+os.chdir(current_path)
 cfg = load_config(os.path.join(current_path, "demo/pose_cfg_multi.yaml"))
 
 dataset = create_dataset(cfg)
@@ -111,5 +112,6 @@ def process_body_image(req):
 
 if __name__ == "__main__":
     rospy.init_node("body_pose_node", anonymous=True)
-    rospy.Service('get_body_pose', BodyPose, process_body_image)
+    rospy.Service('~get_body_pose', BodyPose, process_body_image)
+    rospy.loginfo("body pose service started")
     rospy.spin()
