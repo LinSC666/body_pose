@@ -34,7 +34,7 @@ draw_multi = PersonDraw()
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read image from file
-file_name = "/home/xiaoqiang/Pictures/sports1.jpeg"
+file_name = "demo/image_multi.png"
 image = imread(file_name, mode='RGB')
 
 time1 = time.time()
