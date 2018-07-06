@@ -4,7 +4,7 @@
 
 ### 安装
 1. 安装tensorflow
-由于小强上面没有Nvidia显卡所以我们，安装CPU版本的Tensorflow。小强的CPU支持一些高效的指令集，默认的Tensorflow为了能够在更多平台上运行，没有使用这些指令集。所以性能实际上没有发挥到最高。我们可以安装开启了这些优化指令的版本。
+由于小强上面没有Nvidia显卡,所以我们安装CPU版本的Tensorflow。小强的CPU支持一些高效的指令集，默认的Tensorflow为了能够在更多平台上运行，没有使用这些指令集。性能实际上没有发挥到最高。我们可以安装开启了这些优化指令的版本。
 
 ```bash
 sudo pip install --ignore-installed --upgrade "https://github.com/lakshayg/tensorflow-build/raw/master/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl"
@@ -70,7 +70,7 @@ rosrun image_view image_view image:=/body_pose_tester/processed_image
 
  ![0_1530880373290_QQ图片20180706203240.jpg](https://community.bwbot.org/assets/uploads/files/1530880392561-qq图片20180706203240-resized.jpg) 
 
-## 在自己的程序中使用此服务
+### 在自己的程序中使用此服务
 
 可以在自己的launch文件中添加这样的内容来启动节点
 
