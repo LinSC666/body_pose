@@ -45,6 +45,8 @@ from multiperson.predict import (SpatialModel, eval_graph,
                                  get_person_conf_multicut)
 from nnet import predict
 from util import visualize
+import cv2
+
 
 # setup tensorflow date
 current_path = os.path.dirname(__file__)
@@ -64,11 +66,19 @@ bridge = CvBridge()
 
 
 def process_body_image(req):
+    process_width = int(rospy.get_param("~process_width", 320))
+    process_height = int(rospy.get_param("~process_height", 240))
+
     try:
         cv_image = bridge.imgmsg_to_cv2(req.image, "bgr8")
     except CvBridgeError as e:
         rospy.logerr(e)
-    image_batch = data_to_input(cv_image)
+    height, width, channels = cv_image.shape
+    resize_rio_width = 1.0 * width / process_width
+    resize_rio_height = 1.0 * height / process_height
+
+    resized_cv_image = cv2.resize(cv_image, (process_width, process_height))
+    image_batch = data_to_input(resized_cv_image)
     outputs_np = sess.run(outputs, feed_dict={inputs: image_batch})
     scmap, locref, pairwise_diff = predict.extract_cnn_output(
         outputs_np, cfg, dataset.pairwise_stats)
@@ -78,7 +88,7 @@ def process_body_image(req):
     person_conf_multi = get_person_conf_multicut(
         sm, unLab, unary_array, pos_array)
     num_people = person_conf_multi.shape[0]
-    conf_min_count = 3  # 至少三个点才被认为能够接受
+    conf_min_count = rospy.get_param("conf_min_count", 5)  # 至少三个点才被认为能够接受
     bodys_response = BodyPoseResponse()
     for pidx in range(num_people):
         if np.sum(person_conf_multi[pidx, :, 0] > 0) < conf_min_count:
@@ -89,23 +99,40 @@ def process_body_image(req):
         if len(body_rect_filterd) < conf_min_count:
             continue
         body_info = BodyInfo()
-        body_info.nose = body_rect[0]
-        body_info.right_eye = body_rect[1]
-        body_info.left_eye = body_rect[2]
-        body_info.right_ear = body_rect[3]
-        body_info.left_ear = body_rect[4]
-        body_info.right_arm_top = body_rect[5]
-        body_info.left_arm_top = body_rect[6]
-        body_info.right_arm_middle = body_rect[7]
-        body_info.left_arm_middle = body_rect[8]
-        body_info.right_arm_bottom = body_rect[9]
-        body_info.left_arm_bottom = body_rect[10]
-        body_info.right_leg_top = body_rect[11]
-        body_info.left_leg_top = body_rect[12]
-        body_info.right_leg_middle = body_rect[13]
-        body_info.left_leg_middle = body_rect[14]
-        body_info.right_leg_bottom = body_rect[15]
-        body_info.left_leg_bottom = body_rect[16]
+        body_info.nose = [body_rect[0][0] * resize_rio_width,
+                          body_rect[0][1] * resize_rio_height]
+        body_info.right_eye = [body_rect[1][0] * resize_rio_width,
+                               body_rect[1][1] * resize_rio_height]
+        body_info.left_eye = [body_rect[2][0] * resize_rio_width,
+                              body_rect[2][1] * resize_rio_height]
+        body_info.right_ear = [body_rect[3][0] * resize_rio_width,
+                               body_rect[3][1] * resize_rio_height]
+        body_info.left_ear = [body_rect[4][0] * resize_rio_width,
+                              body_rect[4][1] * resize_rio_height]
+        body_info.right_arm_top = [body_rect[5][0] * resize_rio_width,
+                                   body_rect[5][1] * resize_rio_height]
+        body_info.left_arm_top = [body_rect[6][0] * resize_rio_width,
+                                  body_rect[6][1] * resize_rio_height]
+        body_info.right_arm_middle = [body_rect[7][0] * resize_rio_width,
+                                      body_rect[7][1] * resize_rio_height]
+        body_info.left_arm_middle = [body_rect[8][0] * resize_rio_width,
+                                     body_rect[8][1] * resize_rio_height]
+        body_info.right_arm_bottom = [body_rect[9][0] * resize_rio_width,
+                                      body_rect[9][1] * resize_rio_height]
+        body_info.left_arm_bottom = [body_rect[10][0] * resize_rio_width,
+                                     body_rect[10][1] * resize_rio_height]
+        body_info.right_leg_top = [body_rect[11][0] * resize_rio_width,
+                                   body_rect[11][1] * resize_rio_height]
+        body_info.left_leg_top = [body_rect[12][0] * resize_rio_width,
+                                  body_rect[12][1] * resize_rio_height]
+        body_info.right_leg_middle = [body_rect[13][0] * resize_rio_width,
+                                      body_rect[13][1] * resize_rio_height]
+        body_info.left_leg_middle = [body_rect[14][0] * resize_rio_width,
+                                     body_rect[14][1] * resize_rio_height]
+        body_info.right_leg_bottom = [body_rect[15][0] * resize_rio_width,
+                                      body_rect[15][1] * resize_rio_height]
+        body_info.left_leg_bottom = [body_rect[16][0] * resize_rio_width,
+                                     body_rect[16][1] * resize_rio_height]
         bodys_response.body_poses.append(body_info)
     return bodys_response
 
