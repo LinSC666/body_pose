@@ -1,10 +1,10 @@
 [body_pose](https://github.com/BluewhaleRobot/body_pose) 是一个人体姿态识别的软件包。这个软件包可以从图片中识别出人体的耳朵，眼睛，鼻子，四肢的共17个特征点。其实现是通过深度学习网络利用tensorflow框架。此软件还支持多人同时识别。
 
-![0_1530878202843_6f71b239-27ae-453a-94d9-94de429c8c84-image.png](/assets/uploads/files/1530878219879-6f71b239-27ae-453a-94d9-94de429c8c84-image-resized.png) 
+![0_1530878202843_6f71b239-27ae-453a-94d9-94de429c8c84-image.png](https://community.bwbot.org/assets/uploads/files/1530878219879-6f71b239-27ae-453a-94d9-94de429c8c84-image-resized.png) 
 
 ### 安装
 1. 安装tensorflow
-由于小强上面没有Nvidia显卡所以我们，安装CPU版本的Tensorflow。小强的CPU支持一些高效的指令集，默认的Tensorflow为了能够在更多平台上运行，没有使用这些指令集。所以性能实际上没有发挥到最高。我们可以安装开启了这些优化指令的版本。
+由于小强上面没有Nvidia显卡,所以我们安装CPU版本的Tensorflow。小强的CPU支持一些高效的指令集，默认的Tensorflow为了能够在更多平台上运行，没有使用这些指令集。性能实际上没有发挥到最高。我们可以安装开启了这些优化指令的版本。
 
 ```bash
 sudo pip install --ignore-installed --upgrade "https://github.com/lakshayg/tensorflow-build/raw/master/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl"
@@ -42,7 +42,7 @@ TF_CUDNN_USE_AUTOTUNE=0 python demo/singleperson.py
 
 运行成功后可以看到下图
 
-![0_1530879542859_94996fd8-2ca8-418f-ac9f-11da6221380a-image.png](/assets/uploads/files/1530879564082-94996fd8-2ca8-418f-ac9f-11da6221380a-image-resized.png) 
+![0_1530879542859_94996fd8-2ca8-418f-ac9f-11da6221380a-image.png](https://community.bwbot.org/assets/uploads/files/1530879564082-94996fd8-2ca8-418f-ac9f-11da6221380a-image-resized.png) 
 
 2. 运行多人识别的例子
 
@@ -52,7 +52,7 @@ TF_CUDNN_USE_AUTOTUNE=0 python demo/demo_multiperson.py
 
 成功运行后显示下面的图像
 
-![0_1530879857466_158a04a4-defc-498a-87e3-fdae8ee9ab41-image.png](/assets/uploads/files/1530879880168-158a04a4-defc-498a-87e3-fdae8ee9ab41-image-resized.png) 
+![0_1530879857466_158a04a4-defc-498a-87e3-fdae8ee9ab41-image.png](https://community.bwbot.org/assets/uploads/files/1530879880168-158a04a4-defc-498a-87e3-fdae8ee9ab41-image-resized.png) 
 
 3. 运行ROS服务
 
@@ -68,9 +68,9 @@ rosrun image_view image_view image:=/body_pose_tester/processed_image
 
 可以看到图中标了一些圆圈。这些都是被识别出的人体特征位置。
 
- ![0_1530880373290_QQ图片20180706203240.jpg](/assets/uploads/files/1530880392561-qq图片20180706203240-resized.jpg) 
+ ![0_1530880373290_QQ图片20180706203240.jpg](https://community.bwbot.org/assets/uploads/files/1530880392561-qq图片20180706203240-resized.jpg) 
 
-## 在自己的程序中使用此服务
+### 在自己的程序中使用此服务
 
 可以在自己的launch文件中添加这样的内容来启动节点
 
