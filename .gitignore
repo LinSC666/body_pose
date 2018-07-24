@@ -1,7 +1,5 @@
 *.pyc
 *.o
 _pycache__/
-models/
 build/
-lib/
 .vscode/
