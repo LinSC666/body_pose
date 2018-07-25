@@ -57,7 +57,7 @@ TF_CUDNN_USE_AUTOTUNE=0 python demo/demo_multiperson.py
 3. 运行ROS服务
 
 ```bash
-roslaunch xiaoqiang_track body_pose_test.launch
+roslaunch body_pose body_pose_test.launch
 ```
 这个launch文件在小强上可以直接运行。但是如果不是在小强上你需要把usb_cam的节点换成自己的摄像头节点。
 服务启动成功后会自动的识别摄像头中的图像。处理的结果会显示在 `/body_pose_tester/processed_image` topic 里面。可以利用摄像头显示处理结果。
