@@ -19,6 +19,7 @@ sudo pip install scipy scikit-image matplotlib pyyaml easydict cython munkres
 3. 下载相关模型
 
 ```
+git clone https://github.com/BluewhaleRobot/body_pose
 # 单人模型
 cd src/models/mpii
 ./download_models.sh
