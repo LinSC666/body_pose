@@ -13,7 +13,7 @@ sudo pip install --ignore-installed --upgrade "https://github.com/lakshayg/tenso
 2. 安装软件包相关依赖
 
 ```bash
-sudo pip install scipy scikit-image matplotlib pyyaml easydict cython munkres
+sudo pip install scipy scikit-image matplotlib pyyaml easydict cython munkres==1.0.12
 ```
 
 3. 下载相关模型
