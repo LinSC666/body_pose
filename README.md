@@ -7,7 +7,7 @@
 由于小强上面没有Nvidia显卡,所以我们安装CPU版本的Tensorflow。小强的CPU支持一些高效的指令集，默认的Tensorflow为了能够在更多平台上运行，没有使用这些指令集。性能实际上没有发挥到最高。我们可以安装开启了这些优化指令的版本。
 
 ```bash
-sudo pip install --ignore-installed --upgrade "https://github.com/lakshayg/tensorflow-build/raw/master/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl"
+sudo pip2 install --ignore-installed --upgrade "https://github.com/lakshayg/tensorflow-build/releases/download/tf1.12.0-macOS-mojave-ubuntu16.04-py2-py3/tensorflow-1.12.0-cp27-cp27mu-linux_x86_64.whl"
 ```
 
 2. 安装软件包相关依赖
