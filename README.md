@@ -67,7 +67,9 @@ TF_CUDNN_USE_AUTOTUNE=0 python demo/demo_multiperson.py
    
   ③然后修改"body_pose_test_node.py的~get_body_pose为/body_pose/get_body_pose;  ~image为/usb_cam/image_raw
   
-  ④然后rosrun image_view image_view image:=/body_pose_tester/processed_image
+  ④然后
+  roslaunch body_pose body_pose_testsc.launch
+  rosrun image_view image_view image:=/body_pose/get_body_pose
   
 *（插入）python画图函数：
   #画一条厚度为5像素的蓝色斜线
